@@ -175,32 +175,89 @@ audio {
 }
 
 /* Footer */
-footer {
-    padding: 20px;
-    text-align: center;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.footer {
+    background-color: #f5f5f5;
+    padding: 30px 20px 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
 }
 
-/* Footer links */
-.footer-links {
+.footer-container {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-/* Footer copyright */
-.footer-copyright {
-    font-size: 12px;
+.footer-info h3 {
+    margin: 0 0 15px;
+    font-weight: 500;
+    font-size: 18px;
 }
 
-.footer a {
-    color: #fff;
-    font-size:12px;
+.contacts p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.footer-info a {
+    color: #333;
     text-decoration: none;
-    width: 50%;
-    text-align: center;
+    transition: color 0.3s;
+}
+
+.footer-info a:hover {
+    color: #555;
+}
+
+.footer-social {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icon {
+    width: 30px;
+    height: 30px;
+    fill: #333;
+    transition: fill 0.3s;
+}
+
+.social-icon:hover {
+    fill: #555;
+}
+
+.footer-bottom {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 14px;
+}
+
+.footer-bottom a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .footer-container, .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
 }
 
 /* Карта */
@@ -376,4 +433,85 @@ input:not(:checked) + label {
 
 .card[for="c4"] {
     background-image: url('images/lera7.jpg');
+}
+
+@media (max-width: 768px) {
+    .section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .photo-description, .photo-wrapper {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .audio-player {
+        margin: 20px 0;
+        width: 100%;
+    }
+
+    .volume-bar {
+        justify-content: center;
+    }
+}
+
+/*@media (min-width: 1024px) {*/
+/*    .section {*/
+/*        flex-direction: row;*/
+/*        align-items: flex-start;*/
+/*        text-align: left;*/
+/*    }*/
+
+/*    .photo-description, .photo-wrapper {*/
+/*        max-width: 50%;*/
+/*        margin: 0;*/
+/*    }*/
+
+/*    .audio-player {*/
+/*        width: 100%;*/
+/*        margin: 20px 0;*/
+/*    }*/
+/*}*/
+
+/* Стили для складных устройств */
+@media (max-width: 768px) {
+    .section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .photo-description, .photo-wrapper {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .audio-player {
+        margin: 20px 0;
+        width: 100%;
+    }
+
+    .volume-bar {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .section {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .photo-description, .photo-wrapper {
+        max-width: 50%;
+        margin: 0;
+    }
+
+    .audio-player {
+        width: 100%;
+        margin: 20px 0;
+    }
 }

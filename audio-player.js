@@ -1,7 +1,8 @@
 {
   class AudioPlayer extends HTMLElement {
+    maxVolume = 1;
     playing = false;
-    volume = 0.4;
+    volume = 0.5;
     prevVolume = 0.4;
     initialized = false;
     barWidth = 3;
@@ -18,19 +19,8 @@
 
     static get observedAttributes() {
       return [
-        // audio tag attributes
-        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
         'src', 'muted', 'crossorigin', 'loop', 'preload', 'autoplay',
-        // the name of the audio
-        'title',
-        // the size of the frequency bar
-        'bar-width',
-        // the size of the gap between the bars
-        'bar-gap',
-        // the percentage of the frequency buffer data to represent
-        // if the dataArray contains 1024 data points only a percentage of data will
-        // be used to draw on the canvas
-        'buffer-percentage'
+        'title', 'bar-width', 'bar-gap', 'buffer-percentage'
       ];
     }
 
@@ -65,8 +55,6 @@
     updateAudioAttributes(name, value) {
       if (!this.audio || this.nonAudioAttributes.has(name)) return;
 
-      // if the attribute was explicitly set on the audio-player tag
-      // set it otherwise remove it
       if (this.attributes.getNamedItem(name)) {
         this.audio.setAttribute(name, value ?? '')
       } else {
@@ -110,19 +98,12 @@
       const bufferSize = (this.bufferLength * this.bufferPercentage) / 100;
       let x = 0;
 
-      // this is a loss representation of the frequency
-      // some data are loss to fit the size of the canvas
       for (let i = 0; i < barCount; i++) {
-        // get percentage of i value
         const iPerc = Math.round((i * 100) / barCount);
-        // what the i percentage maps to in the frequency data
         const pos = Math.round((bufferSize * iPerc) / 100);
         const frequency = this.dataArray[pos];
-        // frequency value in percentage
         const frequencyPerc = (frequency * 100) / 255;
-        // frequency percentage value in pixel in relation to the canvas height
         const barHeight = (frequencyPerc * this.canvas.height) / 100;
-        // flip the height so the bar is drawn from the bottom
         const y = this.canvas.height - barHeight;
 
         this.canvasCtx.fillStyle = `rgba(${frequency}, 255, 100)`;
@@ -179,7 +160,23 @@
         this.playPauseBtn.textContent = 'pause';
         this.playPauseBtn.classList.add('playing');
         this.updateFrequency();
+
+        document.querySelectorAll('audio-player').forEach(player => {
+          if (player !== this) {
+            player.audio.pause();
+          }
+        });
       }, false);
+
+      this.volumeUpBtn.addEventListener('click', () => {
+        this.volumeBar.value = Math.min(Number(this.volumeBar.value) + 0.1, this.maxVolume);
+        this.changeVolume();
+      });
+
+      this.volumeDownBtn.addEventListener('click', () => {
+        this.volumeBar.value = Math.max(Number(this.volumeBar.value) - 0.1, 0);
+        this.changeVolume();
+      });
     }
 
     async togglePlay() {
@@ -193,17 +190,17 @@
 
       return this.audio.play();
     }
-    
+
     getTimeString(time) {
       const secs = `${parseInt(`${time % 60}`, 10)}`.padStart(2, '0');
       const min = parseInt(`${(time / 60) % 60}`, 10);
-  
+
       return `${min}:${secs}`;
     }
-    
+
     changeVolume() {
-      this.volume = Number(this.volumeBar.value);
-      
+      this.volume = Math.min(this.volumeBar.value, 0.25);
+
       if (Number(this.volume) > 1) {
         this.volumeBar.parentNode.className = 'volume-bar over';
       } else if (Number(this.volume) > 0) {
@@ -211,26 +208,26 @@
       } else {
         this.volumeBar.parentNode.className = 'volume-bar';
       }
-      
+
       if (this.gainNode) {
         this.gainNode.gain.value = this.volume;
       }
     }
-    
+
     toggleMute(muted = null) {
       this.volumeBar.value = muted || this.volume === 0 ? this.prevVolume : 0;
       this.changeVolume();
     }
-    
+
     seekTo(value) {
       this.audio.currentTime = value;
     }
-    
+
     updateAudioTime() {
       this.progressBar.value = this.audio.currentTime;
       this.currentTimeEl.textContent = this.getTimeString(this.audio.currentTime);
     }
-    
+
     style() {
       return `
       <style>
@@ -290,57 +287,56 @@
         }
         
         .volume-bar {
-            width: 30px;
-            min-width: 30px;
-            height: 30px;
-            background: url("./audio-player-icon-sprite.png") 50% center/500% 100% no-repeat;
-            position: relative;
-        }
-        
-        .volume-bar.half {
-            background: url("./audio-player-icon-sprite.png") 75% center/500% 100% no-repeat;
-        }
-        .volume-bar.over {
-            background: url("./audio-player-icon-sprite.png") 100% center/500% 100% no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 150px; /* Уменьшена ширина полосы громкости */
+            margin: 0 auto;
         }
         
         .volume-field {
-            display: none;
-            position: absolute;
             appearance: none;
             height: 20px;
-            right: 100%;
-            top: 50%;
-            transform: translateY(-50%) rotate(180deg);
-            z-index: 5;
-            margin: 0;
-            border-radius: 2px;
-            background: #ffffff;
+            width: 60px;
+            margin: 0 5px;
+            background: #333; /* Темно-серый фон */
         }
         
         .volume-field::-webkit-slider-thumb {
             appearance: none;
             height: 20px;
             width: 10px;
-            background: #6d78ff;
+            background: #ccc; /* Светло-серый ползунок */
         }
         
         .volume-field::-moz-range-thumb {
             appearance: none;
             height: 20px;
             width: 10px;
-            background: #6d78ff
+            background: #ccc; /* Светло-серый ползунок */
         }
         
-        .volume-field::-ms-thumb  {
+        .volume-field::-ms-thumb {
             appearance: none;
             height: 20px;
             width: 10px;
-            background: #6d78ff
+            background: #ccc; /* Светло-серый ползунок */
         }
         
-        .volume-bar:hover .volume-field {
-            display: block;
+        .volume-up-btn, .volume-down-btn {
+            width: 20px;
+            height: 20px;
+            background: #555; /* Темно-серый фон кнопок */
+            color: #fff; /* Белый текст */
+            border: none;
+            border-radius: 30%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .volume-up-btn:hover, .volume-down-btn:hover {
+            background: #777; /* Светлее при наведении */
         }
         
         .progress-indicator {
@@ -416,7 +412,7 @@
       </style>
     `
     }
-    
+
     render() {
       this.shadowRoot.innerHTML = `
        ${this.style()}
@@ -431,40 +427,42 @@
               <canvas class="visualizer" style="width: 100%; height: 20px"></canvas>
           </div>
           <div class="volume-bar">
-              <input type="range" min="0" max="2" step="0.01" value="${this.volume}" class="volume-field">
+              <button class="volume-down-btn" type="button">-</button>
+              <input type="range" min="0" max="1" step="0.01" value="${this.volume}" class="volume-field">
+              <button class="volume-up-btn" type="button">+</button>
           </div>
         </figure>
       `;
-      
+
       this.audio = this.shadowRoot.querySelector('audio');
       this.playPauseBtn = this.shadowRoot.querySelector('.play-btn');
       this.titleElement = this.shadowRoot.querySelector('.audio-name');
       this.volumeBar = this.shadowRoot.querySelector('.volume-field');
+      this.volumeUpBtn = this.shadowRoot.querySelector('.volume-up-btn');
+      this.volumeDownBtn = this.shadowRoot.querySelector('.volume-down-btn');
       this.progressIndicator = this.shadowRoot.querySelector('.progress-indicator');
       this.currentTimeEl = this.progressIndicator.children[0];
       this.progressBar = this.progressIndicator.children[1];
       this.durationEl = this.progressIndicator.children[2];
       this.canvas = this.shadowRoot.querySelector('canvas');
-      
+
       this.canvasCtx = this.canvas.getContext("2d");
-      // support retina display on canvas for a more crispy/HD look
       const scale = window.devicePixelRatio;
-      this.canvas.width = Math.floor(this.canvas.width* scale);
+      this.canvas.width = Math.floor(this.canvas.width * scale);
       this.canvas.height = Math.floor(this.canvas.height * scale);
       this.titleElement.textContent = this.attributes.getNamedItem('src')
         ? this.attributes.getNamedItem('title').value ?? 'untitled'
         : 'No Audio Source Provided';
       this.volumeBar.value = this.volume;
-      
-      // if rendering or re-rendering all audio attributes need to be reset
+
       for (let i = 0; i < this.attributes.length; i++) {
         const attr = this.attributes[i];
         this.updateAudioAttributes(attr.name, attr.value);
       }
-      
+
       this.attachEvents();
     }
   }
-  
+
   customElements.define('audio-player', AudioPlayer);
 }
