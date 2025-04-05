@@ -199,7 +199,7 @@
     }
 
     changeVolume() {
-      this.volume = Math.min(this.volumeBar.value, 0.25);
+      this.volume = Math.min(this.volumeBar.value, 1);
 
       if (Number(this.volume) > 1) {
         this.volumeBar.parentNode.className = 'volume-bar over';

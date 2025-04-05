@@ -301,6 +301,167 @@ audio {
     width: 100%;
 }
 
+
+
+
+
+
+/* Стили для аккордеона оглавления */
+.accordion {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.accordion-header:hover {
+    background-color: rgba(245, 245, 245, 0.9);
+}
+
+.accordion-header h3 {
+    flex-grow: 1;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    text-align: left; /* Выравнивание по левому краю */
+    word-break: break-word; /* Предотвращает выход текста за границы */
+    padding-right: 10px; /* Отступ справа для предотвращения наложения на иконку */
+}
+
+.duration {
+    margin-right: 15px;
+    font-size: 0.9rem;
+    color: #666;
+    white-space: nowrap;
+}
+
+.toggle-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.toggle-btn .icon {
+    font-size: 18px;
+    line-height: 1;
+    transition: transform 0.3s;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s;
+    background-color: rgba(250, 250, 250, 0.9);
+    padding: 0 15px;
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 200px;
+    padding: 15px;
+}
+
+.accordion-item.active .toggle-btn .icon {
+    transform: rotate(45deg);
+}
+
+.accordion-content p {
+    margin: 0;
+    line-height: 1.5;
+    color: #444;
+}
+
+/* Стиль для мобильных устройств */
+@media (max-width: 768px) {
+    .accordion-header {
+        padding: 12px 10px; /* Уменьшаем горизонтальные отступы */
+        flex-wrap: wrap; /* Разрешаем перенос элементов */
+    }
+
+    .accordion-header h3 {
+        font-size: 0.95rem; /* Уменьшаем размер шрифта */
+        flex: 1 1 100%; /* Заголовок занимает всю ширину первой строки */
+        margin-bottom: 5px; /* Отступ перед продолжительностью */
+        order: 1; /* Помещаем заголовок первым */
+    }
+
+    .duration {
+        font-size: 0.8rem;
+        order: 2; /* Продолжительность вторая */
+        flex: 1 1 auto; /* Растягивается на доступное пространство */
+        text-align: left; /* Выравнивание по левому краю */
+        margin: 0; /* Убираем правый отступ */
+    }
+
+    .toggle-btn {
+        order: 3; /* Кнопка последняя */
+        margin-left: auto; /* Прижимаем кнопку вправо */
+    }
+}
+
+/* Стили для секции с отрывками */
+#excerpts {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+#excerpts .section-title {
+    font-size: 2.5em;
+    font-family: 'Playfair Display', serif;
+    color: #f0f0f0;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+#excerpts .section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: #f0f0f0;
+    margin: 15px auto 0;
+}
+
+#excerpts .section {
+    margin: 40px auto;
+}
+
+/* Стили для оглавления */
+#table-of-contents {
+    padding-top: 80px; /* Отступ сверху для фиксированного меню */
+}
+
+
+
+
+
+
+
 /* Footer */
 .footer {
     background-color: #f5f5f5;
@@ -438,21 +599,19 @@ audio {
     }
 }
 
-
-/*
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+#letter p,
+.section p,
+.photo-description p,
+.accordion-content p,
+.text-justify {
+    hyphens: none !important; /* Отключаем автоматические переносы через тире */
+    word-break: keep-all; /* Запрещаем разрывать слова */
+    overflow-wrap: break-word; /* Но разрешаем перенос очень длинных слов */
+    white-space: normal; /* Стандартное поведение пробелов */
 }
 
-body {
-    background-color: #eeeeea;
-}
-
-КАРТОЧКА
-*/
+/*КАРТОЧКА*/
+/**!*/
 
 .wrapper {
     width: 100%;
@@ -493,29 +652,36 @@ body {
     flex-wrap: nowrap;
 }
 
-.card > .row > .icon {
-    background: #223;
-    color: white;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 100px 0px 0px 20px;
-}
-
 .card > .row > .description {
     display: flex;
     justify-content: center;
     flex-direction: column;
     overflow: hidden;
     height: 80px;
-    width: 300px; /* Изменено на 300px, чтобы соответствовать ширине карточки */
-    opacity: 0;
+    width: 300px;
+    opacity: 30;
     transform: translateY(30px);
-    transition-delay: .3s;
-    transition: all .3s ease;
+    transition-delay: .77s;
+    transition: all .77s ease;
+    padding-left: 15px; /* Добавляем отступ слева */
+    padding-right: 15px; /* Отступ справа для баланса */
+    background: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон для лучшей читаемости */
+    border-radius: 1px; /* Скругляем углы подложки */
+}
+
+.description h4 {
+    text-transform: uppercase;
+    color: #f0f0f0; /* Светлый цвет как в основной теме сайта */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Тень для читаемости на светлом фоне */
+    margin-bottom: 50px; /* Отступ снизу от заголовка */
+    font-family: 'Playfair Display', serif; /* Шрифт как у других заголовков на сайте */
+    font-size: 1.2rem; /* Увеличиваем размер для лучшей читаемости */
+    letter-spacing: 0.5px; /* Небольшой интервал между буквами */
+}
+
+/* Скрываем номера на карточках */
+.card > .row > .icon {
+    display: none; /* Полностью скрываем номера на карточках */
 }
 
 .description p {
@@ -551,15 +717,19 @@ input:not(:checked) + label {
 }
 
 .card[for="c2"] {
-    background-image: url('images/lera4.png');
+    background-image: url('images/универ.JPG');
 }
 
 .card[for="c3"] {
-    background-image: url('images/lera5.jpg');
+    background-image: url('images/Дом Игнатова.JPG');
 }
 
 .card[for="c4"] {
-    background-image: url('images/lera7.jpg');
+    background-image: url('images/Дом Мастеров.jpg');
+}
+
+.card[for="c5"] {
+    background-image: url('images/lera4.png');
 }
 
 @media (max-width: 768px) {
@@ -642,3 +812,45 @@ input:not(:checked) + label {
         margin: 20px 0;
     }
 }
+
+
+.payform-tbank {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin: 2px auto;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        max-width: 250px;
+    }
+    .payform-tbank-row {
+        margin: 2px;
+        border-radius: 4px;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        -webkit-transition: 0.3s;
+        -o-transition: 0.3s;
+        transition: 0.3s;
+        border: 1px solid #DFE3F3;
+        padding: 15px;
+        outline: none;
+        background-color: #DFE3F3;
+        font-size: 15px;
+    }
+    .payform-tbank-row:focus {
+        background-color: #FFFFFF;
+        border: 1px solid #616871;
+        border-radius: 4px;
+    }
+    .payform-tbank-btn {
+        background-color: #FBC520;
+        border: 1px solid #FBC520;
+        color: #3C2C0B;
+    }
+    .payform-tbank-btn:hover {
+        background-color: #FAB619;
+        border: 1px solid #FAB619;
+    }
