@@ -46,9 +46,8 @@
                autoplay
                muted
                preload="auto"
-               playsinline
-               poster="thumbnail.jpg">
-          <source src="аудиоэкскурсия_калуга_.mp4" type="video/mp4">
+               playsinline>
+          <source src="аудиоэкскурсия_калуга_ГК.mp4" type="video/mp4">
           Ваш браузер не поддерживает тег <code>video</code>.
         </video>
         <div class="header-content">
@@ -806,6 +805,13 @@
                     item.classList.add('active');
                 }
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const vid = document.getElementById('background-video');
+          vid.play().catch(() => {
+            console.warn('Требуется взаимодействие пользователя для старта видео');
+          });
         });
     </script>
 
