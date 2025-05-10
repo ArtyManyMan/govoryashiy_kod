@@ -177,8 +177,15 @@ body {
     color: #f0f0f0;
 }
 
-.section header p {
-    text-align: justify;
+.section header p,
+#table-of-contents p,
+#excerpts p,
+#excerpts li,
+#bot p,
+#bot li,
+#about_us p,
+#support p{
+    text-align: left;
     text-justify: inter-word;
     hyphens: auto;
     -webkit-hyphens: auto;
@@ -766,23 +773,23 @@ input:not(:checked) + label {
 }
 
 .card[for="c1"] {
-    background-image: url('images/lera3.jpg');
+    background-image: url('images/Калуга Дом Теософского общества.jpg');
 }
 
 .card[for="c2"] {
-    background-image: url('images/универ.JPG');
+    background-image: url('images/Калуга - КГУ - мужская гимназия.JPG');
 }
 
 .card[for="c3"] {
-    background-image: url('images/Дом Игнатова.JPG');
+    background-image: url('images/Калуга Дом Игнатова - музей изобразительных искусств.JPG');
 }
 
 .card[for="c4"] {
-    background-image: url('images/Дом Мастеров.jpg');
+    background-image: url('images/Калуга Дом мастеров.jpg');
 }
 
 .card[for="c5"] {
-    background-image: url('images/lera4.png');
+    background-image: url('images/Калуга Дом Саниных.png');
 }
 
 @media (max-width: 768px) {
