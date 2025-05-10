@@ -651,6 +651,8 @@ audio {
 }
 
 #letter p,
+#table-of-contents p,
+#excerpts p,
 .section p,
 .photo-description p,
 .accordion-content p,
